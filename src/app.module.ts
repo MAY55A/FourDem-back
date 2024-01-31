@@ -2,9 +2,9 @@ import { Module } from '@nestjs/common';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { TypeOrmModule } from '@nestjs/typeorm';
-import { User } from './entities/user.entity';
-import { UserService } from './services/user.service';
-import { UsersController } from './controllers/users.controller';
+import { User } from './users/user.entity';
+import { AuthModule } from './auth/auth.module';
+import { UsersModule } from './users/users.module';
 
 @Module({
   imports: [
@@ -13,12 +13,14 @@ import { UsersController } from './controllers/users.controller';
       database: 'fourdem',
       username: 'root',
       password: '',
-      entities: [__dirname + '/**/*.entity{.ts,.js}'],
+      entities: [User],
       synchronize: true,
+      logging: true
     }),
-    TypeOrmModule.forFeature([User]),
+    AuthModule,
+    UsersModule,
   ],
-  controllers: [AppController, UsersController],
-  providers: [AppService, UserService],
+  controllers: [AppController],
+  providers: [AppService],
 })
 export class AppModule {}

@@ -10,7 +10,7 @@ export class User {
   @Column()
   name: string;
 
-  @Column()
+  @Column({ unique: true })
   email: string;
 
   @Column()
@@ -19,15 +19,18 @@ export class User {
   @CreateDateColumn()
   createdAt: Date;
 
+  @Column({default: "description ..."})
+  description: string;
+
   @Column()
   type: string;
 
-  @Column({nullable: true})
+  @Column({ nullable: true })
   domain: string;
 
-  @Column({type: 'simple-array', nullable: true})
+  @Column({ type: 'simple-array', nullable: true })
   contacts: string[];
-  
-  @Column({type: 'simple-array', nullable: true})
+
+  @Column({ type: 'simple-array', nullable: true })
   skills: string[];
 }
