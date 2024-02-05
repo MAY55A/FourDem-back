@@ -14,12 +14,16 @@ export class ProjectService {
         return await this.projectRepository.save(project);
     }
 
+    async getOne(id: number): Promise<Project> {
+        return await this.projectRepository.findOneBy({id: id});
+    }
+
     async getAllByUser(userid: number): Promise<Project[]> {
         return this.projectRepository.findBy({ proposer: userid });
     }
 
-    async getAllByCategory(catid: number): Promise<Project[]> {
-        return this.projectRepository.findBy({ categories: ILike(`%*${catid}*%`) });
+    async getAllByCategory(cat: string): Promise<Project[]> {
+        return this.projectRepository.findBy({ categories: ILike(`%${cat}%`) });
     }
 
     async getAll(): Promise<Project[]> {

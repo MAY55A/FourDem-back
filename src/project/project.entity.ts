@@ -13,7 +13,7 @@ export class Project {
   @Column()
   proposer: number;
 
-  @Column({default: "proposed"})
+  @Column({default: "proposé"})
   status: string;
 
   @CreateDateColumn()
@@ -25,7 +25,7 @@ export class Project {
   @Column()
   finishedAt: Date;
 
-  @Column({default: "description ..."})
+  @Column({type: "text", default: "description ..."})
   description: string;
 
   @Column()

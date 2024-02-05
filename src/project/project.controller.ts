@@ -10,8 +10,18 @@ export class ProjectController {
         return this.ProjectService.getAll();
     }
 
-    @Get(':user')
-    async getAllByUser(@Param('user') user: number): Promise<Project[]> {
+    @Get(':id')
+    async getOne(@Param('id') id: number): Promise<Project> {
+        try {
+            return this.ProjectService.getOne(id);
+        } catch (error) {
+            console.error('Error fetching Project by id:', error);
+            throw new HttpException('Project not found', HttpStatus.NOT_FOUND);
+        }
+    }
+
+    @Get('user/:id')
+    async getAllByUser(@Param('id') user: number): Promise<Project[]> {
         try {
             return this.ProjectService.getAllByUser(user);
         } catch (error) {
@@ -20,10 +30,10 @@ export class ProjectController {
         }
     }
 
-    @Get(':category')
-    async getAllByuser(@Param('category') cat: number): Promise<Project[]> {
+    @Get('category/:name')
+    async getAllByCategoryser(@Param('name') cat: string): Promise<Project[]> {
         try {
-            return this.ProjectService.getAllByUser(cat);
+            return this.ProjectService.getAllByCategory(cat);
         } catch (error) {
             console.error('Error fetching Projects by category:', error);
             throw new HttpException('Projects not found', HttpStatus.NOT_FOUND);
