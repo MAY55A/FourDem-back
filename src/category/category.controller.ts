@@ -10,8 +10,18 @@ export class CategoryController {
         return this.CategoryService.getAll();
     }
 
-    @Get(':domain')
-    async getAllByDomain(@Param('domain') domain: string): Promise<Category[]> {
+    @Get(':id')
+    async getOne(@Param('id') id: number): Promise<Category> {
+        try {
+            return this.CategoryService.getOne(id);
+        } catch (error) {
+            console.error('Error fetching Category by id:', error);
+            throw new HttpException('Category not found', HttpStatus.NOT_FOUND);
+        }
+    }
+
+    @Get('domain/:d')
+    async getAllByDomain(@Param('d') domain: string): Promise<Category[]> {
         try {
             return this.CategoryService.getAllByDomain(domain);
         } catch (error) {

@@ -18,6 +18,10 @@ export class CategoryService {
         return this.CategoryRepository.findBy({ domain: domain });
     }
 
+    async getOne(id: number): Promise<Category> {
+        return this.CategoryRepository.findOneBy({ id: id });
+    }
+
     async getAll(): Promise<Category[]> {
         return await this.CategoryRepository.find();
     }
