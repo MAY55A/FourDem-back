@@ -20,6 +20,16 @@ export class ProjectController {
         }
     }
 
+    @Get('published/all')
+    async getAllPublished(): Promise<Project[]> {
+        try {
+            return this.ProjectService.getAllPublished();
+        } catch (error) {
+            console.error('Error fetching published projects:', error);
+            throw new HttpException('Projects not found', HttpStatus.NOT_FOUND);
+        }
+    }
+
     @Get('user/:id')
     async getAllByUser(@Param('id') user: number): Promise<Project[]> {
         try {

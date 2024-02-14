@@ -11,7 +11,10 @@ export class Project {
   title: string;
 
   @Column()
-  proposer: number;
+  proposerId: number;
+
+  @Column()
+  proposerName: string;
 
   @Column({default: "proposé"})
   status: string;

@@ -19,11 +19,15 @@ export class ProjectService {
     }
 
     async getAllByUser(userid: number): Promise<Project[]> {
-        return this.projectRepository.findBy({ proposer: userid });
+        return this.projectRepository.findBy({ proposerId: userid });
     }
 
     async getAllByCategory(cat: string): Promise<Project[]> {
         return this.projectRepository.findBy({ categories: ILike(`%${cat}%`) });
+    }
+
+    async getAllPublished(): Promise<Project[]> {
+        return await this.projectRepository.findBy({ status: 'publié'});
     }
 
     async getAll(): Promise<Project[]> {
