@@ -28,9 +28,12 @@ export class User {
   @Column({ nullable: true })
   domain: string;
 
-  @Column({ type: 'simple-array', nullable: true })
-  contacts: string[];
+  @Column({ nullable: true })
+  contacts: String;
 
-  @Column({ type: 'simple-array', nullable: true })
-  skills: string[];
+  @Column({ nullable: true })
+  tel: String;
+
+  @Column({ nullable: true })
+  skills: string;
 }

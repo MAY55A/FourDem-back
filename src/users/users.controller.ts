@@ -10,7 +10,7 @@ export class UsersController {
         return this.userService.readAll();
     }
 
-    @Get(':email')
+    @Get('email::email')
     async findByEmail(@Param('email') email: string): Promise<User> {
         try {
             return this.userService.findByEmail(email);
@@ -19,7 +19,7 @@ export class UsersController {
             throw new HttpException('User not found', HttpStatus.NOT_FOUND);
         }    }
 
-    @Get(':id')
+    @Get('id::id')
     findById(@Param('id') id: number): Promise<User> {
         try {
             return this.userService.findById(id);
