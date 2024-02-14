@@ -20,10 +20,30 @@ export class ServiceController {
         }
     }
 
+    @Get('domain/:name')
+    async getAllByDomain(@Param('name') d: string): Promise<Service[]> {
+        try {
+            return this.serviceService.getAllByDomain(d);
+        } catch (error) {
+            console.error('Error fetching Services by Project:', error);
+            throw new HttpException('Services not found', HttpStatus.NOT_FOUND);
+        }
+    }
+
     @Get('project/:id')
     async getAllByProject(@Param('id') project: number): Promise<Service[]> {
         try {
             return this.serviceService.getAllByProject(project);
+        } catch (error) {
+            console.error('Error fetching Services by Project:', error);
+            throw new HttpException('Services not found', HttpStatus.NOT_FOUND);
+        }
+    }
+
+    @Get('user/:id')
+    async getAllByUser(@Param('id') user: number): Promise<Service[]> {
+        try {
+            return this.serviceService.getAllByUser(user);
         } catch (error) {
             console.error('Error fetching Services by Project:', error);
             throw new HttpException('Services not found', HttpStatus.NOT_FOUND);

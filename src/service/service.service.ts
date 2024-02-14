@@ -18,10 +18,23 @@ async getOne(id: number): Promise<Service> {
     return await this.serviceRepository.findOneBy({id: id});
 }
 
-async getAllByProject(projectid: number): Promise<Service[]> {
-    return this.serviceRepository.findBy({ project: projectid });
+async getAllByUser(userid: number): Promise<Service[]> {
+    return this.serviceRepository.query(
+        `select service.*, project.title from service join project on service.project = project.id where service.proposerId = '${userid}'`
+    );
 }
 
+async getAllByProject(projectid: number): Promise<Service[]> {
+    return this.serviceRepository.query(
+        `select * from service where project = '${projectid}' order by proposedAt desc;`
+    );
+}
+
+async getAllByDomain(domain: string): Promise<Service[]> {
+    return this.serviceRepository.query(
+        `select service.*, user.domain from service join user on service.proposerId = user.id where user.domain = '${domain}'`
+    );
+}
 
 async getAll(): Promise<Service[]> {
     return await this.serviceRepository.find();
