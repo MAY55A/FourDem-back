@@ -1,4 +1,5 @@
-import { Entity, Column, PrimaryGeneratedColumn} from 'typeorm';
+import { Project } from 'src/project/project.entity';
+import { Entity, Column, PrimaryGeneratedColumn, CreateDateColumn, ManyToMany} from 'typeorm';
 
 @Entity()
 
@@ -16,4 +17,9 @@ export class Category {
   @Column()
   domain: string;
 
+  @CreateDateColumn()
+  addedAt: Date;
+
+  @ManyToMany(() => Project, project => project.categories)
+  projects: Project[];
 }

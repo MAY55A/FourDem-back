@@ -1,4 +1,7 @@
-import { Entity, Column, PrimaryGeneratedColumn, CreateDateColumn } from 'typeorm';
+import { Project } from 'src/project/project.entity';
+import { Service } from 'src/service/service.entity';
+import { Entity, Column, PrimaryGeneratedColumn, CreateDateColumn, OneToMany } from 'typeorm';
+import { Notification } from '../notification/notification.entity';
 
 @Entity()
 
@@ -13,13 +16,13 @@ export class User {
   @Column({ unique: true })
   email: string;
 
-  @Column()
+  @Column({select: false})
   hash: string;
 
   @CreateDateColumn()
   createdAt: Date;
 
-  @Column({default: "description ..."})
+  @Column({nullable: true})
   description: string;
 
   @Column()
@@ -36,4 +39,13 @@ export class User {
 
   @Column({ nullable: true })
   skills: string;
+
+  @OneToMany(() => Service, (service) => service.proposer)
+  services: Service[];
+
+  @OneToMany(() => Project, (project) => project.proposer)
+  projects: Project[];
+
+  @OneToMany(() => Notification, (notification) => notification.user)
+  notifications: Notification[];
 }

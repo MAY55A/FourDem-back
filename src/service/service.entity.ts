@@ -1,4 +1,6 @@
-import { Entity, Column, PrimaryGeneratedColumn, CreateDateColumn } from 'typeorm';
+import { Project } from 'src/project/project.entity';
+import { User } from 'src/users/user.entity';
+import { Entity, Column, PrimaryGeneratedColumn, CreateDateColumn, ManyToMany, ManyToOne } from 'typeorm';
 
 @Entity()
 
@@ -7,14 +9,11 @@ export class Service {
   @PrimaryGeneratedColumn()
   id: number;
 
-  @Column()
-  proposerId: number;
+  @ManyToOne(() => User, (user) => user.services, {eager: true})
+  proposer: User;
 
-  @Column()
-  proposerName: string;
-
-  @Column()
-  project: number;
+  @ManyToOne(() => Project, (project) => project.services, {eager: true})
+  project: Project;
 
   @Column({default: "proposé"})
   status: string;

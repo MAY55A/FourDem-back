@@ -1,4 +1,7 @@
-import { Entity, Column, PrimaryGeneratedColumn, CreateDateColumn } from 'typeorm';
+import { Category } from 'src/category/category.entity';
+import { Service } from 'src/service/service.entity';
+import { User } from 'src/users/user.entity';
+import { Entity, Column, PrimaryGeneratedColumn, CreateDateColumn, ManyToOne, ManyToMany, JoinTable, OneToMany } from 'typeorm';
 
 @Entity()
 
@@ -10,11 +13,8 @@ export class Project {
   @Column()
   title: string;
 
-  @Column()
-  proposerId: number;
-
-  @Column()
-  proposerName: string;
+  @ManyToOne(() => User, (user) => user.projects, {eager: true})
+  proposer: User;
 
   @Column({default: "proposé"})
   status: string;
@@ -31,7 +31,10 @@ export class Project {
   @Column({type: "text", default: "description ..."})
   description: string;
 
-  @Column()
-  categories: string;
+  @ManyToMany(() => Category, category => category.projects, {eager: true, cascade: true })
+  @JoinTable()
+  categories: Category[];
 
+  @OneToMany(() => Service, (service) => service.project)
+  services: Service[];
 }
