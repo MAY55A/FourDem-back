@@ -8,9 +8,11 @@ import { UsersModule } from './users/users.module';
 import { Category } from './category/category.entity';
 import { Project } from './project/project.entity';
 import { Service } from './service/service.entity';
+import { Notification } from './notification/notification.entity';
 import { CategoryModule } from './category/category.module';
 import { ProjectModule } from './project/project.module';
 import { ServiceModule } from './service/service.module';
+import { NotificationModule } from './notification/notification.module';
 
 @Module({
   imports: [
@@ -19,7 +21,7 @@ import { ServiceModule } from './service/service.module';
       database: 'fourdem',
       username: 'root',
       password: '',
-      entities: [User, Category, Project, Service],
+      entities: [User, Category, Project, Service, Notification],
       synchronize: true,
       logging: true
     }),
@@ -28,6 +30,7 @@ import { ServiceModule } from './service/service.module';
     AuthModule,
     UsersModule,
     ServiceModule,
+    NotificationModule,
   ],
   controllers: [AppController],
   providers: [AppService],
