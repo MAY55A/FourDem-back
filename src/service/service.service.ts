@@ -15,25 +15,40 @@ async create(service: Service): Promise<Service> {
 }
 
 async getOne(id: number): Promise<Service> {
-    return await this.serviceRepository.findOneBy({id: id});
+    return await this.serviceRepository.findOne({
+        where: {proposer:{id: id}},
+        relations: ['proposer', 'project']
+    });
 }
 
 async getAllByUser(userid: number): Promise<Service[]> {
-    return this.serviceRepository.query(
-        `select service.*, project.title from service join project on service.project = project.id where service.proposerId = '${userid}'`
-    );
+    return this.serviceRepository.find({
+        relations: ['project', 'proposer'],
+        where: {proposer: {id: userid}},
+        order: {proposedAt: 'DESC'}
+    });
 }
 
 async getAllByProject(projectid: number): Promise<Service[]> {
-    return this.serviceRepository.query(
-        `select * from service where project = '${projectid}' order by proposedAt desc;`
-    );
+    return this.serviceRepository.find({
+        relations: ['project', 'proposer'],
+        where: {project: {id: projectid}},
+        order: {proposedAt: 'DESC'}
+    });
 }
 
 async getAllByDomain(domain: string): Promise<Service[]> {
-    return this.serviceRepository.query(
-        `select service.*, user.domain from service join user on service.proposerId = user.id where user.domain = '${domain}'`
-    );
+    return this.serviceRepository.find({
+        relations: ['project', 'proposer'],
+        where: {proposer: {domain: domain}},
+        order: {proposedAt: 'DESC'}
+    });
+}
+
+async getCountByDomain(domain: string): Promise<number> {
+    return this.serviceRepository.count({
+        where: {proposer: {domain: domain}}
+    });
 }
 
 async getAll(): Promise<Service[]> {

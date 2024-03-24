@@ -14,21 +14,35 @@ export class UserService {
         return await this.userRepository.save(user);
     }
 
+    async findByType(type: string): Promise<User[] | undefined> {
+        return this.userRepository.findBy({ type: type }); 
+    }
+
     async findByEmail(useremail: string): Promise<User | undefined> {
         return this.userRepository.findOneBy({ email: useremail }); 
     }
 
+    async getHash(useremail: string): Promise<User | undefined> {
+        return this.userRepository.findOne({
+            select: ['id', 'email', 'hash'],
+            where: {email: useremail}
+        });
+    }
+
     async findById(userid: number): Promise<User | undefined> {
-        return this.userRepository.findOneBy({ id: userid }); 
+        return this.userRepository.findOne({
+             where: {id: userid},
+             relations: ['projects', 'services']
+            }); 
     }
     
     async readAll(): Promise<User[]> {
         return await this.userRepository.find();
     }
 
-    async update(user: User): Promise<UpdateResult> {
+    async update(user: User) {
 
-        return await this.userRepository.update(user.id, user);
+        return await this.userRepository.save(user);
     }
 
     async delete(id): Promise<DeleteResult> {

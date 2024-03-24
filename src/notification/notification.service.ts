@@ -20,15 +20,17 @@ async getOne(id: number): Promise<Notification> {
 
 async getAllByUser(userid: number): Promise<Notification[]> {
     return this.notificationRepository.find({
-        where: {user: {id: userid}},
-        order: {seen: 'ASC', sentAt: 'DESC'}
+        where: [{user: {id: userid}}, {type: "default"}],
+        order: {seen: 'ASC', sentAt: 'DESC'},
+        take: 10
     });
 }
 
 async getAllAdmin(): Promise<Notification[]> {
     return this.notificationRepository.find({
         where: {userId: IsNull(), type : Not("default")},
-        order: {seen: 'ASC', sentAt: 'DESC'}
+        order: {seen: 'ASC', sentAt: 'DESC'},
+        take: 5
     });
 }
 

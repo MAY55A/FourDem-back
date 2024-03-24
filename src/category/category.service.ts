@@ -2,6 +2,7 @@ import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Category } from './category.entity';
 import { DeleteResult, Repository, UpdateResult } from 'typeorm';
+import { Project } from 'src/project/project.entity';
 
 @Injectable()
 export class CategoryService {
@@ -15,7 +16,17 @@ export class CategoryService {
     }
 
     async getAllByDomain(domain: string): Promise<Category[]> {
-        return this.CategoryRepository.findBy({ domain: domain });
+        return this.CategoryRepository.find({
+            where: { domain: domain},
+            relations: ['projects']
+        });
+    }
+
+    async getOneWithProjects(id: number): Promise<Category> {
+        return this.CategoryRepository.findOne({
+            where: { id: id},
+            relations: ['projects']
+        });
     }
 
     async getOne(id: number): Promise<Category> {

@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, NotFoundException } from '@nestjs/common';
 import { Project } from './project.entity';
 import { DeleteResult, ILike, Repository, UpdateResult } from 'typeorm';
 import { InjectRepository } from '@nestjs/typeorm';
@@ -15,27 +15,50 @@ export class ProjectService {
     }
 
     async getOne(id: number): Promise<Project> {
-        return await this.projectRepository.findOneBy({id: id});
+        return this.projectRepository.findOne({
+            where: {id: id},
+            relations: ['proposer', 'categories']
+        });
     }
 
     async getAllByUser(userid: number): Promise<Project[]> {
-        return this.projectRepository.findBy({ proposerId: userid });
+        return this.projectRepository.find({
+            where: { proposer: {id: userid} },
+            relations: ['proposer', 'categories'],
+            order: {proposedAt: 'DESC'}
+        });
     }
 
-    async getAllByCategory(cat: string): Promise<Project[]> {
-        return this.projectRepository.findBy({ categories: ILike(`%${cat}%`) });
+    async getAllByCategory(catid: number): Promise<Project[]> {
+        return this.projectRepository.find({
+            where: { categories: {id: catid} },
+            relations: ['proposer', 'categories'],
+            order: {publishedAt: 'DESC'}
+        });
     }
 
     async getAllPublished(): Promise<Project[]> {
-        return await this.projectRepository.findBy({ status: 'publié'});
+        return this.projectRepository.find({
+            where: { status : 'publié' },
+            relations: ['proposer', 'categories'],
+            order: {publishedAt: 'DESC'}
+        });
     }
 
     async getAll(): Promise<Project[]> {
-        return await this.projectRepository.find();
+        return await this.projectRepository.find({relations: ['proposer', 'categories']});
     }
 
-    async update(project: Project): Promise<UpdateResult> {
-        return await this.projectRepository.update(project.id, project);
+    async update(project: Project): Promise<Project> {
+        const existingProject = await this.projectRepository.findOne({
+            relations: ['categories'],
+            where: {id: project.id}
+        });
+        if (!existingProject) {
+          throw new NotFoundException(`Project with ID ${project.id} not found.`);
+        }
+        Object.assign(existingProject, project);
+        return await this.projectRepository.save(existingProject);
     }
 
     async delete(id): Promise<DeleteResult> {
