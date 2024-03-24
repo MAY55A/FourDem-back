@@ -7,7 +7,12 @@ export class CategoryController {
     constructor(private CategoryService: CategoryService) { }
     @Get()
     read(): Promise<Category[]> {
-        return this.CategoryService.getAll();
+        try {
+            return this.CategoryService.getAll();
+        } catch (error) {
+            console.error('Error fetching Categories:', error);
+            throw new HttpException('Categories not found', HttpStatus.NOT_FOUND);
+        }
     }
 
     @Get(':id')
@@ -20,13 +25,23 @@ export class CategoryController {
         }
     }
 
+    @Get(':id/projects')
+    async getOneWithProjects(@Param('id') id: number): Promise<Category> {
+        try {
+            return this.CategoryService.getOneWithProjects(id);
+        } catch (error) {
+            console.error('Error fetching Category by id:', error);
+            throw new HttpException('Category not found', HttpStatus.NOT_FOUND);
+        }
+    }
+
     @Get('domain/:d')
     async getAllByDomain(@Param('d') domain: string): Promise<Category[]> {
         try {
             return this.CategoryService.getAllByDomain(domain);
         } catch (error) {
-            console.error('Error fetching Category by domain:', error);
-            throw new HttpException('Category not found', HttpStatus.NOT_FOUND);
+            console.error('Error fetching Categories by domain:', error);
+            throw new HttpException('Categories not found', HttpStatus.NOT_FOUND);
         }
     }
 

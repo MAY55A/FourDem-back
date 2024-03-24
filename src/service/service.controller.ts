@@ -25,7 +25,17 @@ export class ServiceController {
         try {
             return this.serviceService.getAllByDomain(d);
         } catch (error) {
-            console.error('Error fetching Services by Project:', error);
+            console.error('Error fetching services by domain:', error);
+            throw new HttpException('Services not found', HttpStatus.NOT_FOUND);
+        }
+    }
+
+    @Get('domain/:name/total')
+    async getTotalByDomain(@Param('name') d: string): Promise<number> {
+        try {
+            return this.serviceService.getCountByDomain(d);
+        } catch (error) {
+            console.error('Error fetching total of services by domain:', error);
             throw new HttpException('Services not found', HttpStatus.NOT_FOUND);
         }
     }

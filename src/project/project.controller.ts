@@ -40,8 +40,8 @@ export class ProjectController {
         }
     }
 
-    @Get('category/:name')
-    async getAllByCategoryser(@Param('name') cat: string): Promise<Project[]> {
+    @Get('category/:id')
+    async getAllByCategoryser(@Param('id') cat: number): Promise<Project[]> {
         try {
             return this.ProjectService.getAllByCategory(cat);
         } catch (error) {

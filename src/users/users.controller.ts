@@ -10,6 +10,16 @@ export class UsersController {
         return this.userService.readAll();
     }
 
+    @Get('type::type')
+    async findByType(@Param('type') type: string): Promise<User[]> {
+        try {
+            return this.userService.findByType(type);
+        } catch (error) {
+            console.error('Error fetching users by type:', error);
+            throw new HttpException('Users not found', HttpStatus.NOT_FOUND);
+        }
+    }
+
     @Get('email::email')
     async findByEmail(@Param('email') email: string): Promise<User> {
         try {
@@ -17,7 +27,8 @@ export class UsersController {
         } catch (error) {
             console.error('Error fetching user by email:', error);
             throw new HttpException('User not found', HttpStatus.NOT_FOUND);
-        }    }
+        }
+    }
 
     @Get('id::id')
     findById(@Param('id') id: number): Promise<User> {
@@ -25,6 +36,16 @@ export class UsersController {
             return this.userService.findById(id);
         } catch (error) {
             console.error('Error fetching user by ID:', error);
+            throw new HttpException('User not found', HttpStatus.NOT_FOUND);
+        }
+    }
+
+    @Get('hash/:email')
+    getHash(@Param('email') email: string): Promise<User> {
+        try {
+            return this.userService.getHash(email);
+        } catch (error) {
+            console.error('Error fetching user by email:', error);
             throw new HttpException('User not found', HttpStatus.NOT_FOUND);
         }
     }
