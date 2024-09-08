@@ -20,7 +20,7 @@ import { NotificationModule } from './notification/notification.module';
     ConfigModule.forRoot(),
     TypeOrmModule.forRoot({
       type: 'mysql',
-      url: process.env.DB_URL,
+      url: process.env.MYSQL_PUBLIC_URL,
       entities: [User, Category, Project, Service, Notification],
     }),
     CategoryModule,
