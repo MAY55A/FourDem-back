@@ -34,3 +34,5 @@ import { NotificationModule } from './notification/notification.module';
   providers: [AppService],
 })
 export class AppModule {}
+
+console.log('DB_URL:', process.env.MYSQL_PUBLIC_URL);
