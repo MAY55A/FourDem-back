@@ -1,6 +1,7 @@
 import { Module } from '@nestjs/common';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
+import { ConfigModule } from '@nestjs/config';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { User } from './users/user.entity';
 import { AuthModule } from './auth/auth.module';
@@ -16,14 +17,11 @@ import { NotificationModule } from './notification/notification.module';
 
 @Module({
   imports: [
+    ConfigModule.forRoot(),
     TypeOrmModule.forRoot({
       type: 'mysql',
-      database: 'fourdem',
-      username: 'root',
-      password: '',
+      url: process.env.DB_URL,
       entities: [User, Category, Project, Service, Notification],
-      synchronize: true,
-      logging: true
     }),
     CategoryModule,
     ProjectModule,
